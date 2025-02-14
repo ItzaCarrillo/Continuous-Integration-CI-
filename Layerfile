@@ -1,8 +1,16 @@
-FROM ubuntu:latest
+FROM ubuntu:22.04  # Usa un sistema base Linux
+RUN apt update && apt install -y curl git  # Instala herramientas necesarias
 
-RUN apt-get update && apt-get install -y curl git
-
+# Clona tu código desde GitHub
+RUN git clone $(GIT_REMOTE) /app
 WORKDIR /app
-COPY . .
 
-CMD ["echo", "Pipeline ejecutado correctamente"]
+# Instala Node.js y npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+RUN apt install -y nodejs
+
+# Instala dependencias del proyecto
+RUN npm install
+
+# Ejecuta pruebas automáticas (ajústalo según tu proyecto)
+RUN npm test
